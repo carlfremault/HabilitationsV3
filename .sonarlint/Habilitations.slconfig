@@ -1,0 +1,12 @@
+{
+  "ServerUri": "http://localhost:9000/",
+  "Organization": null,
+  "ProjectKey": "Habilitations",
+  "ProjectName": "Habilitations",
+  "Profiles": {
+    "CSharp": {
+      "ProfileKey": "AXx1KVD3J0bsy8NpB4--",
+      "ProfileTimestamp": "2021-10-12T15:40:14Z"
+    }
+  }
+}
