@@ -90,15 +90,25 @@ namespace Habilitations.vue
             if (dgvDeveloppeurs.SelectedRows.Count > 0)
             {
                 Developpeur developpeur = (Developpeur)bdgDeveloppeurs.List[bdgDeveloppeurs.Position];
-                if (MessageBox.Show("Voulez-vous vraiment supprimer " + developpeur.Nom + " "+ developpeur.Prenom + " ?", "Confirmation de suppression", MessageBoxButtons.YesNo) == DialogResult.Yes) {
-                    controle.DelDeveloppeur(developpeur);
-                    RemplirListeDeveloppeurs();
+                if (developpeur.Profil != "admin")
+                {
+                    if (MessageBox.Show("Voulez-vous vraiment supprimer " + developpeur.Nom + " " + developpeur.Prenom + " ?", "Confirmation de suppression", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        controle.DelDeveloppeur(developpeur);
+                        RemplirListeDeveloppeurs();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Une ligne doit être sélectionnée.", "Information");
+                    }
                 }
+                else
+                {
+                    MessageBox.Show("Un developpeur avec profil 'admin' ne peut être supprimé", "Information");
+                }
+ 
             }
-            else
-            {
-                MessageBox.Show("Une ligne doit être sélectionnée.", "Information");
-            }
+     
         }
 
         /// <summary>
@@ -126,6 +136,16 @@ namespace Habilitations.vue
             txtPrenom.Text = "";
             txtTel.Text = "";
             txtMail.Text = "";
+            cboProfil.Enabled = true;
+            cboProfil.SelectedIndex = 0;
+        }
+
+        /// <summary>
+        /// Vider la zone de saisie d'un nouveau profil
+        /// </summary>
+        private void ViderProfil()
+        {
+            txtProfil.Text = "";
             cboProfil.SelectedIndex = 0;
         }
 
@@ -184,6 +204,10 @@ namespace Habilitations.vue
                 txtTel.Text = developpeur.Tel;
                 txtMail.Text = developpeur.Mail;
                 cboProfil.SelectedIndex = cboProfil.FindStringExact(developpeur.Profil);
+                if (developpeur.Profil == "admin")
+                {
+                    cboProfil.Enabled = false;
+                }
             }
             else
             {
@@ -251,5 +275,52 @@ namespace Habilitations.vue
             grbDeveloppeur.Enabled = true;
             grbPwd.Enabled = false;
         }
-    }
+
+        /// <summary>
+        /// Supprimer un profil, après avoir vérifié si le profil n'est pas attribué à un des développeurs
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSuppProfil_Click(object sender, EventArgs e)
+        {
+            List<Developpeur> lesDeveloppeurs = controle.GetLesDeveloppeurs();
+            Profil profil = (Profil)bdgProfils.List[bdgProfils.Position];
+            if (lesDeveloppeurs.Exists(developpeur => developpeur.Idprofil.Equals(profil.Idprofil)) || profil.Nom == "admin")
+            {
+                MessageBox.Show("Ce profil est utilisé et ne peut être supprimé.", "Information");
+            }
+            else
+            {
+                controle.DelProfil(profil);
+            }            
+            RemplirListeProfils();
+            ViderProfil();
+            
+        }
+
+        /// <summary>
+        /// Ajouter un profil, après avoir vérifié qu'un nom a été saisi et que le profil n'existe pas déjà
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAjoutProfil_Click(object sender, EventArgs e)
+        {
+            if (txtProfil.Text != "")
+            {
+                string nouveauProfil = txtProfil.Text.ToLower();
+                List<Profil> lesProfils = controle.GetLesProfils();
+                if (lesProfils.Exists(unProfil => unProfil.Nom.Equals(nouveauProfil)))
+                {
+                    MessageBox.Show("Ce profil existe déjà.", "Information");
+                } 
+                else
+                {
+                    Profil profil = new Profil(0, nouveauProfil);
+                    controle.AddProfil(profil);
+                }
+            }
+            RemplirListeProfils();
+            ViderProfil();            
+        }
+    } 
 }

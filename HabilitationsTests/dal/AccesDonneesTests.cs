@@ -40,6 +40,22 @@ namespace Habilitations.dal.Tests
             bdd.ReqUpdate("ROLLBACK;", null);
         }
 
+        /// <summary>
+        /// Enlever les contraintes
+        /// </summary>
+        private void CancelConstraints()
+        {
+            bdd.ReqUpdate("SET FOREIGN_KEY_CHECKS=0", null);
+        }
+
+        /// <summary>
+        /// Remettre les contraintes
+        /// </summary>
+        private void ResetConstraints()
+        {
+            bdd.ReqUpdate("SET FOREIGN_KEY_CHECKS=1", null);
+        }
+
         [TestMethod()]
         public void ControleAuthentificationTest()
         {
@@ -66,11 +82,11 @@ namespace Habilitations.dal.Tests
         public void GetLesProfilsTest()
         {
             List<Profil> lesProfils = AccesDonnees.GetLesProfils();
-            Assert.IsTrue(lesProfils.Count == 5, "devrait réussir, 5 profils");
+            Assert.IsTrue(lesProfils.Count > 0, "devrait réussir");
         }
 
         [TestMethod()]
-        public void DelDepveloppeurTest()
+        public void DelDeveloppeurTest()
         {
             BeginTransaction();
             List<Developpeur> lesDeveloppeurs = AccesDonnees.GetLesDeveloppeurs();
@@ -79,14 +95,37 @@ namespace Habilitations.dal.Tests
             {
                 Developpeur devDelete = lesDeveloppeurs[0];
                 AccesDonnees.DelDeveloppeur(devDelete);
-                List<Developpeur> newList = AccesDonnees.GetLesDeveloppeurs();
-                int nbDeveloppeursAfterDelete = newList.Count;
-                Developpeur notFound = newList.Find(dev => dev.Iddeveloppeur.Equals(devDelete.Iddeveloppeur));
+                lesDeveloppeurs = AccesDonnees.GetLesDeveloppeurs();
+                int nbDeveloppeursAfterDelete = lesDeveloppeurs.Count;
+                Developpeur notFound = lesDeveloppeurs.Find(dev => dev.Iddeveloppeur.Equals(devDelete.Iddeveloppeur));
                 Assert.IsNull(notFound, "devrait réussir, développeur non trouvé car supprimé");
                 Assert.AreEqual(nbDeveloppeurs - 1, nbDeveloppeursAfterDelete, "devrait réussir, un dev en moins");
             }
             EndTransaction();
 
+        }
+
+        [TestMethod()]
+        public void DelProfilTest()
+        {
+            BeginTransaction();
+            CancelConstraints();
+
+            List<Profil> lesProfils = AccesDonnees.GetLesProfils();
+            int nbProfils = lesProfils.Count;
+            if (nbProfils > 0)
+            {
+                Profil profilDelete = lesProfils[0];
+                AccesDonnees.DelProfil(profilDelete);
+                lesProfils = AccesDonnees.GetLesProfils();
+                int nbProfilsAfterDelete = lesProfils.Count;
+                Profil notFound = lesProfils.Find(profil => profil.Idprofil.Equals(profilDelete.Idprofil));
+                Assert.IsNull(notFound, "devrait réussir, profil non trouvé car supprimé");
+                Assert.AreEqual(nbProfils - 1, nbProfilsAfterDelete, "devrait réussir, un profil en moins");
+
+            }
+            ResetConstraints();
+            EndTransaction();
         }
 
         [TestMethod()]
@@ -96,14 +135,13 @@ namespace Habilitations.dal.Tests
             List<Developpeur> lesDeveloppeurs = AccesDonnees.GetLesDeveloppeurs();
             int nbDeveloppeurs = lesDeveloppeurs.Count;
 
-            int id = 0;
             string nom = "newNom";
             string prenom = "newPrenom";
             string tel = "newTel";
             string mail = "newMail";
             int idProfil = 3;
             string profil = "front-dev";
-            Developpeur nouveauDev = new Developpeur(id, nom, prenom, tel, mail, idProfil, profil);
+            Developpeur nouveauDev = new Developpeur(0, nom, prenom, tel, mail, idProfil, profil);
 
             AccesDonnees.AddDeveloppeur(nouveauDev);
             lesDeveloppeurs = AccesDonnees.GetLesDeveloppeurs();
@@ -118,6 +156,27 @@ namespace Habilitations.dal.Tests
             Assert.IsNotNull(newDev, "devrait réussir, nouveau dev inséré");
             Assert.AreEqual(nbDeveloppeurs + 1, nouveauNbDeveloppeurs, "devrait réussir, un nouveau dev ajouté");
             EndTransaction();
+        }
+
+        [TestMethod()]
+        public void AddProfilTest()
+        {
+            BeginTransaction();
+            List<Profil> lesProfils = AccesDonnees.GetLesProfils();
+            int nbProfils = lesProfils.Count;
+
+            string nom = "nouveauprofil";
+            Profil nouveauProfil = new Profil(0, nom);
+
+            AccesDonnees.AddProfil(nouveauProfil);
+            lesProfils = AccesDonnees.GetLesProfils();
+            int nouveauNbProfils = lesProfils.Count;
+
+            Profil newProfil = lesProfils.Find(profil => profil.Nom.Equals(nom));
+            Assert.IsNotNull(newProfil, "devrait réussir, nouveau profil inséré");
+            Assert.AreEqual(nbProfils + 1, nouveauNbProfils, "devrait réussir, un nouveau profil ajouté");
+            EndTransaction();
+
         }
 
         [TestMethod()]

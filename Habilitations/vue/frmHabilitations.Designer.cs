@@ -53,6 +53,10 @@
             this.txtPwd2 = new System.Windows.Forms.TextBox();
             this.txtPwd1 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.btnSuppProfil = new System.Windows.Forms.Button();
+            this.btnAjoutProfil = new System.Windows.Forms.Button();
+            this.txtProfil = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDeveloppeurs)).BeginInit();
             this.grbLesDeveloppeurs.SuspendLayout();
             this.grbDeveloppeur.SuspendLayout();
@@ -117,6 +121,10 @@
             // 
             // grbDeveloppeur
             // 
+            this.grbDeveloppeur.Controls.Add(this.label8);
+            this.grbDeveloppeur.Controls.Add(this.txtProfil);
+            this.grbDeveloppeur.Controls.Add(this.btnAjoutProfil);
+            this.grbDeveloppeur.Controls.Add(this.btnSuppProfil);
             this.grbDeveloppeur.Controls.Add(this.btnAnnulerDeveloppeur);
             this.grbDeveloppeur.Controls.Add(this.btnEnregDeveloppeur);
             this.grbDeveloppeur.Controls.Add(this.cboProfil);
@@ -312,6 +320,42 @@
             this.label6.TabIndex = 0;
             this.label6.Text = "pwd";
             // 
+            // btnSuppProfil
+            // 
+            this.btnSuppProfil.Location = new System.Drawing.Point(522, 71);
+            this.btnSuppProfil.Name = "btnSuppProfil";
+            this.btnSuppProfil.Size = new System.Drawing.Size(77, 21);
+            this.btnSuppProfil.TabIndex = 11;
+            this.btnSuppProfil.Text = "supprimer";
+            this.btnSuppProfil.UseVisualStyleBackColor = true;
+            this.btnSuppProfil.Click += new System.EventHandler(this.btnSuppProfil_Click);
+            // 
+            // btnAjoutProfil
+            // 
+            this.btnAjoutProfil.Location = new System.Drawing.Point(522, 98);
+            this.btnAjoutProfil.Name = "btnAjoutProfil";
+            this.btnAjoutProfil.Size = new System.Drawing.Size(77, 21);
+            this.btnAjoutProfil.TabIndex = 12;
+            this.btnAjoutProfil.Text = "ajouter";
+            this.btnAjoutProfil.UseVisualStyleBackColor = true;
+            this.btnAjoutProfil.Click += new System.EventHandler(this.btnAjoutProfil_Click);
+            // 
+            // txtProfil
+            // 
+            this.txtProfil.Location = new System.Drawing.Point(391, 98);
+            this.txtProfil.Name = "txtProfil";
+            this.txtProfil.Size = new System.Drawing.Size(124, 20);
+            this.txtProfil.TabIndex = 13;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(308, 101);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(74, 13);
+            this.label8.TabIndex = 14;
+            this.label8.Text = "nouveau profil";
+            // 
             // FrmHabilitations
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -359,6 +403,10 @@
         private System.Windows.Forms.Button btnEnregPwd;
         private System.Windows.Forms.Button btnChangPwd;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnSuppProfil;
+        private System.Windows.Forms.Button btnAjoutProfil;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox txtProfil;
     }
 }
 

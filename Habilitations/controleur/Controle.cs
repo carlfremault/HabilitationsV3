@@ -70,7 +70,16 @@ namespace Habilitations.controleur
         /// <param name="developpeur">objet developpeur à supprimer</param>
         public void DelDeveloppeur(Developpeur developpeur)
         {
-            AccesDonnees.DelDeveloppeur(developpeur);
+                AccesDonnees.DelDeveloppeur(developpeur);            
+        }
+
+        /// <summary>
+        /// Demande de suppression d'un profil
+        /// </summary>
+        /// <param name="profil"></param>
+        public void DelProfil(Profil profil)
+        {
+            AccesDonnees.DelProfil(profil);
         }
 
         /// <summary>
@@ -80,6 +89,15 @@ namespace Habilitations.controleur
         public void AddDeveloppeur(Developpeur developpeur)
         {
             AccesDonnees.AddDeveloppeur(developpeur);
+        }
+
+        /// <summary>
+        /// Demande d'ajout d'un profil
+        /// </summary>
+        /// <param name="profil"></param>
+        public void AddProfil(Profil profil)
+        {
+            AccesDonnees.AddProfil(profil);
         }
 
         /// <summary>

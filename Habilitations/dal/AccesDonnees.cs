@@ -102,6 +102,21 @@ namespace Habilitations.dal
         }
 
         /// <summary>
+        /// Suppression d'un profil
+        /// </summary>
+        /// <param name="profil"></param>
+        public static void DelProfil(Profil profil)
+        {
+            string req = "delete from profil where idprofil = @idprofil;";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                {"@idprofil", profil.Idprofil }
+            };
+            ConnexionBdd conn = ConnexionBdd.GetInstance(connectionString);
+            conn.ReqUpdate(req, parameters);
+        }
+
+        /// <summary>
         /// Ajoute un développeur
         /// </summary>
         /// <param name="developpeur"></param>
@@ -117,6 +132,21 @@ namespace Habilitations.dal
                 { "@mail", developpeur.Mail },
                 { "@pwd", GetStringSha256Hash(developpeur.Nom) },
                 { "@idprofil", developpeur.Idprofil }
+            };
+            ConnexionBdd conn = ConnexionBdd.GetInstance(connectionString);
+            conn.ReqUpdate(req, parameters);
+        }
+
+        /// <summary>
+        /// Ajoute un profil
+        /// </summary>
+        /// <param name="profil"></param>
+        public static void AddProfil(Profil profil)
+        {
+            string req = "insert into profil(nom) values (@nom);";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                {"@nom", profil.Nom }
             };
             ConnexionBdd conn = ConnexionBdd.GetInstance(connectionString);
             conn.ReqUpdate(req, parameters);
